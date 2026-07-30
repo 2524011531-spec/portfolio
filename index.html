@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>付雅妮 · Portfolio</title>
+<style>
+  :root {
+    --bg: #fdfdfc; --surface: #f7f7f5; --card: #fff;
+    --text: #1e1e1e; --sub: #6e6e6e; --muted: #999;
+    --green: #4caf91; --coral: #e8815b; --blue: #5b8def;
+    --border: #eaeaea; --shadow: 0 1px 3px rgba(0,0,0,.04), 0 1px 2px rgba(0,0,0,.03);
+    --shadow-hover: 0 4px 16px rgba(0,0,0,.06);
+    --radius: 16px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Nav ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(255,255,255,.88); backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+  nav .inner { max-width: 1040px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 52px; padding: 0 24px; }
+  nav .logo { font-weight: 800; font-size: 17px; color: var(--green); letter-spacing: -.5px; }
+  nav .links { display: flex; gap: 28px; }
+  nav .links a { text-decoration: none; font-size: 13px; color: var(--sub); font-weight: 500; transition: color .2s; }
+  nav .links a:hover, nav .links a.active { color: var(--text); }
+
+  /* ── Hero ── */
+  .hero {
+    padding: 120px 24px 72px; text-align: center;
+    background: linear-gradient(180deg, #f0faf6 0%, #fdfdfc 100%);
+  }
+  .hero .photo {
+    width: 104px; height: 104px; border-radius: 50%; object-fit: cover;
+    border: 3px solid #fff; box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    margin-bottom: 24px;
+  }
+  .hero h1 { font-size: 38px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 8px; }
+  .hero h1 em { font-style: normal; color: var(--green); }
+  .hero .subtitle { font-size: 16px; color: var(--sub); margin-bottom: 24px; }
+  .hero .pills { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .hero .pills span {
+    padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 500;
+    background: #fff; border: 1px solid var(--border); color: var(--sub);
+    transition: all .2s;
+  }
+  .hero .pills span:hover { border-color: var(--green); color: var(--green); }
+
+  /* ── Sections ── */
+  section { padding: 72px 24px; }
+  section.alt { background: var(--surface); }
+  .sec-inner { max-width: 1040px; margin: 0 auto; }
+  .sec-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--green); margin-bottom: 8px; }
+  .sec-heading { font-size: 26px; font-weight: 700; margin-bottom: 44px; }
+
+  /* ── Story timeline ── */
+  .timeline { position: relative; padding-left: 28px; margin-bottom: 40px; }
+  .timeline::before { content: ""; position: absolute; left: 7px; top: 4px; bottom: 4px; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-item::before {
+    content: ""; position: absolute; left: -25px; top: 6px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--green); border: 2px solid #fff; box-shadow: 0 0 0 2px var(--green);
+  }
+  .tl-item .tl-date { font-size: 12px; color: var(--muted); margin-bottom: 2px; }
+  .tl-item .tl-title { font-weight: 700; font-size: 15px; }
+  .tl-item .tl-desc { font-size: 13px; color: var(--sub); }
+
+  /* ── Cap grid ── */
+  .caps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .cap {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 28px 24px; box-shadow: var(--shadow); transition: all .25s;
+  }
+  .cap:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+  .cap .cap-icon { font-size: 28px; margin-bottom: 12px; }
+  .cap h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .cap p { font-size: 13px; color: var(--sub); line-height: 1.6; }
+  .cap .cap-num { font-size: 13px; color: var(--green); font-weight: 600; margin-top: 8px; }
+
+  /* ── Project cards ── */
+  .pj-list { display: flex; flex-direction: column; gap: 20px; }
+  .pj {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; box-shadow: var(--shadow);
+    transition: box-shadow .25s;
+  }
+  .pj:hover { box-shadow: var(--shadow-hover); }
+  .pj-img {
+    background: #f9f9f7; position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px; gap: 12px; min-height: 340px;
+  }
+  .pj-img.single { padding: 0; }
+  .pj-img.single img { width: 100%; height: 100%; object-fit: cover; }
+  .pj-img.gallery img {
+    width: calc(50% - 6px); height: 100%; object-fit: contain;
+    border-radius: 8px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.04);
+  }
+  .pj-img .pj-tag {
+    position: absolute; top: 14px; left: 14px; z-index: 2;
+    background: #fff; color: var(--green); font-size: 11px; font-weight: 700;
+    letter-spacing: .5px; padding: 5px 12px; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .pj-img.placeholder {
+    background: linear-gradient(135deg, #f5f3ef, #eef4f0);
+    flex-direction: column; gap: 6px;
+  }
+  .pj-img.placeholder .ph-num { font-size: 64px; font-weight: 800; opacity: .5; }
+  .pj-img.placeholder .ph-label { font-size: 13px; color: var(--sub); }
+  .pj-body { padding: 32px 28px; display: flex; flex-direction: column; }
+  .pj-body .pj-co { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--coral); margin-bottom: 6px; }
+  .pj-body h3 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .pj-body .pj-meta { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+  .pj-body ul { list-style: none; flex: 1; }
+  .pj-body li { font-size: 13px; line-height: 1.7; padding: 4px 0 4px 20px; position: relative; color: #444; }
+  .pj-body li::before { content: "→"; position: absolute; left: 0; color: var(--green); font-size: 11px; top: 5px; }
+  .pj-body .num { color: var(--green); font-weight: 700; }
+  .pj-body .pj-impact { margin-top: 14px; padding: 10px 14px; background: #f7faf8; border-radius: 10px; font-size: 12px; color: var(--green); font-weight: 600; }
+  .pj-body .pj-link-row { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .pj-body .pj-link-row a {
+    font-size: 12px; color: var(--blue); text-decoration: none; font-weight: 500;
+    padding: 4px 0; border-bottom: 1px solid transparent; transition: border-color .2s;
+  }
+  .pj-body .pj-link-row a:hover { border-color: var(--blue); }
+
+  /* ── Mini projects ── */
+  .mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .mini {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 28px; text-align: center; box-shadow: var(--shadow); transition: all .25s;
+  }
+  .mini:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+  .mini .mini-icon { font-size: 36px; margin-bottom: 12px; }
+  .mini h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .mini .mini-num { font-size: 32px; font-weight: 800; color: var(--green); margin: 8px 0; }
+  .mini p { font-size: 12px; color: var(--sub); line-height: 1.6; }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center; padding: 56px 24px; background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+  footer .contact-row { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; font-size: 14px; color: var(--sub); }
+  footer .btn {
+    display: inline-block; padding: 12px 32px;
+    background: var(--text); color: #fff; border-radius: 10px;
+    text-decoration: none; font-size: 14px; font-weight: 600; transition: opacity .2s;
+  }
+  footer .btn:hover { opacity: .8; }
+
+  /* ── Reveal animation ── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: all .5s ease-out; }
+  .reveal.on { opacity: 1; transform: translateY(0); }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .caps { grid-template-columns: 1fr 1fr; }
+    .pj { grid-template-columns: 1fr; }
+    .pj-img { min-height: 220px; padding: 16px; }
+    .pj-img.gallery { flex-direction: row; min-height: 200px; }
+    .mini-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 28px; }
+    nav .links { gap: 16px; }
+  }
+  @media (max-width: 480px) {
+    .caps { grid-template-columns: 1fr; }
+  }
+
+  /* ── Print ── */
+  @media print {
+    body { background: #fff; }
+    nav { display: none; }
+    .hero { background: #fff; padding: 30px 16px; }
+    section { padding: 28px 12px; page-break-inside: avoid; }
+    section.alt { background: #fff; }
+    .cap, .pj, .mini { box-shadow: none; break-inside: avoid; border: 1px solid #ddd; }
+    .cap:hover, .pj:hover, .mini:hover { transform: none; box-shadow: none; }
+    .pj { grid-template-columns: 1fr 1fr; }
+    .pj-img { min-height: 160px; padding: 12px; }
+    .pj-img.gallery { flex-direction: row; min-height: 140px; }
+    .pj-img.gallery img { width: calc(50% - 6px); }
+    .sec-heading { font-size: 20px; margin-bottom: 20px; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════ NAV ════════════ -->
+<nav>
+  <div class="inner">
+    <div class="logo">付雅妮</div>
+    <div class="links">
+      <a href="#home">首页</a>
+      <a href="#story">经历</a>
+      <a href="#cap">能力</a>
+      <a href="#work">项目</a>
+      <a href="#contact">联系</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ════════════ HERO ════════════ -->
+<header class="hero" id="home">
+  <img class="photo" src="photo.jpg" alt="付雅妮">
+  <h1>Hi，我是付<em>雅妮</em></h1>
+  <div class="subtitle">国际传播背景 · 消费电子营销 · 用 AI 把创意落地的营销人</div>
+  <div class="pills">
+    <span>📱 新媒体运营</span>
+    <span>✍️ 品牌内容策划</span>
+    <span>🤖 AI-native 工作流</span>
+    <span>👥 用户社区运营</span>
+  </div>
+</header>
+
+<!-- ════════════ STORY ════════════ -->
+<section id="story">
+  <div class="sec-inner">
+    <div class="sec-label">My Path</div>
+    <div class="sec-heading">从内容创作到 AI 驱动的营销实践</div>
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <div class="tl-date">2024.09 – 至今</div>
+        <div class="tl-title">南京大学 · 国际传播硕士</div>
+        <div class="tl-desc">系统学习品牌传播与跨文化叙事，奠定了理解「品牌如何被感知」的理论框架。期间完成张掖城市品牌国际传播策划案（毕业论文），并独立搭建 AI-native 教育创业项目，将 AI 工具链嵌入真实业务场景。</div>
+      </div>
+      <div class="tl-item reveal">
+        <div class="tl-date">2025.11 – 2026.04</div>
+        <div class="tl-title">科大讯飞 · AI 消费电子品牌市场</div>
+        <div class="tl-desc">第一次将传播理论放入真实商业环境——5 个海外社媒平台、254 条内容、530 万曝光。学会用数据衡量内容效果，用 AI 放大产出效率。这段经历让我确认：我想在消费电子行业做营销。</div>
+      </div>
+      <div class="tl-item reveal">
+        <div class="tl-date">2025.06 – 2025.09</div>
+        <div class="tl-title">蔚来汽车 · 用户社区 & 区域内容</div>
+        <div class="tl-desc">从海外市场切到国内用户运营，学习如何与真实用户对话。以区总视角撰写换电站推文、运营区域小红书账号。发现「把技术语言翻译成用户语言」是消费电子营销的核心能力。</div>
+      </div>
+      <div class="tl-item reveal">
+        <div class="tl-date">2025.02 – 2025.11</div>
+        <div class="tl-title">新华社 + 译林出版社 · 内容根基</div>
+        <div class="tl-desc">10+ 英文短视频全流程制作 + KOL 营销与图书推广。这两段经历养成了我的文字功底、审美判断与独立交付习惯——这些至今仍是我做营销内容的基础能力。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ CAPABILITIES ════════════ -->
+<section class="alt" id="cap">
+  <div class="sec-inner">
+    <div class="sec-label">Capabilities</div>
+    <div class="sec-heading">我能为团队带来什么</div>
+    <div class="caps">
+      <div class="cap reveal">
+        <div class="cap-icon">📱</div>
+        <h3>海外社媒运营</h3>
+        <p>Facebook · Instagram · LinkedIn · X · YouTube 五平台内容策略与日常执行，捕捉平台趋势</p>
+        <div class="cap-num">530万+ 曝光 · 12.1万+ 链接点击</div>
+      </div>
+      <div class="cap reveal">
+        <div class="cap-icon">✍️</div>
+        <h3>品牌内容策划</h3>
+        <p>从技术参数中提炼产品卖点，转化为用户能感知的传播语言。中英双语内容创作能力</p>
+        <div class="cap-num">60+ 英文稿件 · 多语言创意内容</div>
+      </div>
+      <div class="cap reveal">
+        <div class="cap-icon">🎬</div>
+        <h3>短视频全流程</h3>
+        <p>选题→采写→脚本→拍摄→剪辑独立闭环。AI 辅助脚本与字幕，跨文化叙事经验</p>
+        <div class="cap-num">10+ 英文短视频 · YouTube / X 发布</div>
+      </div>
+      <div class="cap reveal">
+        <div class="cap-icon">👥</div>
+        <h3>用户社区运营</h3>
+        <p>引导 KOC 产出 UGC，AI 情感分析捕捉用户洞察。多平台内容排期与数据复盘</p>
+        <div class="cap-num">蔚来南京 · 萤火虫南京 · 小红书</div>
+      </div>
+      <div class="cap reveal">
+        <div class="cap-icon">🤖</div>
+        <h3>AI 工具链嵌入</h3>
+        <p>将 AI 嵌入内容生产、数据分析、翻译质检等工作流——不是「会用工具」，是「用 AI 重构效率」</p>
+        <div class="cap-num">AI Agent · 自动化工作流 · 独立搭建系统</div>
+      </div>
+      <div class="cap reveal">
+        <div class="cap-icon">🎯</div>
+        <h3>KOL / 创作者合作</h3>
+        <p>从筛选→建联→合作执行的全链路经验，标准化分级管理与沟通机制</p>
+        <div class="cap-num">48位 KOL 建联 · 116次合作研究</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ PROJECTS ════════════ -->
+<section id="work">
+  <div class="sec-inner">
+    <div class="sec-label">Featured Projects</div>
+    <div class="sec-heading">实战项目</div>
+    <div class="pj-list">
+
+      <!-- iFLYTEK -->
+      <div class="pj reveal">
+        <div class="pj-img gallery">
+          <div class="pj-tag">AI 消费电子</div>
+          <img src="微信图片_20260427135951_1041_43-e48206d0722e.png" alt="讯飞社媒数据1">
+          <img src="微信图片_20260427140022_1042_43-22b12879f58a.png" alt="讯飞社媒数据2">
+        </div>
+        <div class="pj-body">
+          <div class="pj-co">科大讯飞 iFLYTEK</div>
+          <h3>海外社媒矩阵 & 品牌传播</h3>
+          <div class="pj-meta">品牌市场中心内容部 · 2025.11 – 2026.04</div>
+          <ul>
+            <li>5 大海外社媒平台内容策略与执行，<span class="num">254条</span>内容，总曝光 <span class="num">530万+</span>，覆盖 100万+</li>
+            <li>MWC、GITEX GLOBAL 2026（新加坡）国际展会传播物料制备</li>
+            <li>拉通供应商、设计、法务及多条业务线推动<b>海外官网改版</b>：向各业务线收集产品内容详情页并统一整理为标准化模板，与合作方对接推动改版落地</li>
+            <li>AI 多语言文案生成，<span class="num">500+</span> 专有名词中英对照标准化</li>
+          </ul>
+          <div class="pj-impact">💡 成果：链接点击 12.1万+，内容转向应用案例与技术解读后用户停留时长提升</div>
+          <div class="pj-link-row">
+            <a href="https://www.iflytek.com/en/" target="_blank">讯飞官网 →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- NIO -->
+      <div class="pj reveal">
+        <div class="pj-img gallery">
+          <div class="pj-tag">智能电动汽车</div>
+          <img src="微信图片_20260727222531_182_2.jpg" alt="蔚来内容1">
+          <img src="微信图片_20260727222532_183_2.jpg" alt="蔚来内容2">
+        </div>
+        <div class="pj-body">
+          <div class="pj-co">蔚来汽车 NIO</div>
+          <h3>区域内容策划 & 用户社区运营</h3>
+          <div class="pj-meta">南京分公司市场传播 · 2025.06 – 2025.09</div>
+          <ul>
+            <li>以南京区域区总视角撰写<b>换电站上线</b>系列推文，将产品技术信息转化为用户可感知的传播语言</li>
+            <li>独立运营<b>蔚来南京、萤火虫南京</b>小红书账号——选题策划、图文编辑、发布排期</li>
+            <li>CMP 平台引导 KOC 车主产出 UGC，AI 情感分析 + 关键词聚类精准捕捉用户洞察</li>
+            <li>AI A/B 测试优化标题与内容，提升推文点击转化</li>
+          </ul>
+          <div class="pj-impact">💡 成果：掌握了「技术语言→用户语言」的转化能力，这是消费电子营销的核心基本功</div>
+        </div>
+      </div>
+
+      <!-- Xinhua -->
+      <div class="pj reveal">
+        <div class="pj-img single">
+          <div class="pj-tag">国际媒体</div>
+          <img src="t0465de95c0b89b6663.jpg" alt="新华社" style="object-fit:contain;background:#f5f7fa;">
+        </div>
+        <div class="pj-body">
+          <div class="pj-co">新华通讯社 Xinhua</div>
+          <h3>英文短视频全流程制作</h3>
+          <div class="pj-meta">总社实习记者 · 2025.09 – 2025.11</div>
+          <ul>
+            <li>独立完成 <span class="num">10+</span> 条英文短视频全流程——选题策划→英文采写→脚本撰写→拍摄→剪辑</li>
+            <li>发布于 <b>YouTube、X（Twitter）</b> 等海外平台，面向国际受众</li>
+            <li>运用 AI 辅助脚本优化与字幕生成，提升产出效率</li>
+            <li>锻炼了<b>跨文化叙事能力</b>——理解不同文化背景受众的信息接收习惯</li>
+          </ul>
+          <div class="pj-impact">💡 成果：从选题到发布全流程独立闭环——这条能力直接迁移到了讯飞的海外社媒工作中</div>
+        </div>
+      </div>
+
+      <!-- Yilin -->
+      <div class="pj reveal">
+        <div class="pj-img single">
+          <div class="pj-tag">出版营销</div>
+          <img src="t04f1be91a54965271e.jpg" alt="凤凰出版传媒" style="object-fit:contain;background:#f5f3ef;">
+        </div>
+        <div class="pj-body">
+          <div class="pj-co">译林出版社</div>
+          <h3>KOL 营销 & 创意活动策划</h3>
+          <div class="pj-meta">中国文学出版中心 · 2025.02 – 2025.06</div>
+          <ul>
+            <li>主导《水星逆行》《雪隐鹭鸶》等新书线上 KOL 推广，推动图书触达读者 <span class="num">10万+</span> 人次</li>
+            <li>参与《南京味道》品鉴会等线下创意活动策划与落地执行</li>
+            <li>独立设计《空城纪》《大地上的家乡》等图书推文<b>视觉排版</b></li>
+            <li>协助「健哥会客厅」直播项目全流程——主题→脚本→手卡→预热→复盘</li>
+          </ul>
+          <div class="pj-impact">💡 成果：养成了文字功底与审美判断力——做营销内容的基础能力</div>
+          <div class="pj-link-row" style="gap:6px;flex-wrap:wrap;">
+            <span style="font-size:11px;color:var(--muted);">微信公众号推文示例：</span>
+            <a href="https://mp.weixin.qq.com/s/0_gE2T3Y_4mJ7FNiLqnJxw" target="_blank">①</a>
+            <a href="https://mp.weixin.qq.com/s/P_BsM9jgi6vKFxg9EZT8lQ" target="_blank">②</a>
+            <a href="https://mp.weixin.qq.com/s/ea-cmB9UoGnfODzWMZxU5g" target="_blank">③</a>
+            <a href="https://mp.weixin.qq.com/s/duEqTgIaPa3fVUlWp4QQpw" target="_blank">④</a>
+            <a href="https://mp.weixin.qq.com/s/30_dWIauJqFhKB8kpUt0Aw" target="_blank">⑤</a>
+            <span style="font-size:10px;color:var(--muted);">（微信内打开）</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ SIDE PROJECTS ════════════ -->
+<section class="alt" id="about">
+  <div class="sec-inner">
+    <div class="sec-label">Side Projects</div>
+    <div class="sec-heading">从零到一的独立实践</div>
+    <div class="mini-grid">
+      <div class="mini reveal">
+        <div class="mini-icon">🤖</div>
+        <h4>AI-native 教育项目</h4>
+        <div class="mini-num">30+</div>
+        <div style="font-size:11px;color:var(--muted);">半年英语平均提分</div>
+        <p style="margin-top:8px;">独立搭建 AI 全链路教学交付系统——课程设计→内容生成→学员交互→效果追踪均由 AI 自动化。10+ 学生，验证从获客到交付的商业闭环。<b>核心价值：AI 工具链搭建能力可迁移至企业营销场景。</b></p>
+      </div>
+      <div class="mini reveal">
+        <div class="mini-icon">📹</div>
+        <h4>个人自媒体</h4>
+        <div class="mini-num">1500+</div>
+        <div style="font-size:11px;color:var(--muted);">单月涨粉</div>
+        <p style="margin-top:8px;">小红书知识类口播账号，AI 辅助全流程——选题策划→脚本生成→口播制作。累计播放 10万+，验证内容策划→用户增长全链路。</p>
+      </div>
+      <div class="mini reveal">
+        <div class="mini-icon">🎓</div>
+        <h4>教育背景</h4>
+        <div class="mini-num" style="font-size:20px;color:var(--text);">南京大学</div>
+        <div style="font-size:11px;color:var(--muted);">C9 · 国际传播硕士</div>
+        <p style="margin-top:8px;font-size:12px;">GPA 3.8/4.0 · 中共党员 · 2024–2027<br><br>四川大学（985）<br>网络与新媒体 本科<br>GPA 3.6/4.0</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ FOOTER ════════════ -->
+<footer id="contact">
+  <div class="contact-row">
+    <span>📞 18093601359</span>
+    <span>✉️ 2524011531@qq.com</span>
+    <span>🌐 CET-6 551</span>
+  </div>
+  <a class="btn" href="付雅妮 · 简历.pdf" target="_blank">📄 下载简历 PDF</a>
+</footer>
+
+<script>
+  // Reveal on scroll
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // Active nav
+  const secs = document.querySelectorAll('section, header');
+  const navLinks = document.querySelectorAll('nav .links a');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    secs.forEach(s => { if (scrollY >= s.offsetTop - 150) cur = s.getAttribute('id'); });
+    navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+  });
+</script>
+
+</body>
+</html>
